@@ -17,6 +17,7 @@ import fileImg from './assets/file.png';
 import hbImg from './assets/hb.png';
 import houseImg from './assets/house.png';
 import percentImg from './assets/percent.png';
+import rubIcon from './assets/rub.svg';
 import { LS, LSKeys } from './ls';
 import { appSt } from './style.css';
 import { ThxLayout } from './thx/ThxLayout';
@@ -42,8 +43,6 @@ const faqs = [
   },
 ];
 
-const chipsData = [10000, 36000, 50000, 72000];
-
 const chipsPeriod = [6, 12, 24];
 
 const chipsPercentByPeriod: Record<number, number> = {
@@ -59,7 +58,8 @@ export const App = () => {
   const [sum, setSum] = useState(2000);
   const [period, setPeriod] = useState(12);
   const [error, setError] = useState<string | null>(null);
-  const [step, setStep] = useState<'step1' | 'step2'>('step2');
+  const [step, setStep] = useState<'step1' | 'step2'>('step1');
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     if (!LS.getItem(LSKeys.UserId, null)) {
@@ -71,7 +71,7 @@ export const App = () => {
     setLoading(true);
 
     sendDataToGA({
-      sum: sum.toString(),
+      sum: checked ? 'all' : sum.toString(),
       period,
       avto: 'none',
       var4: 'none',
@@ -102,10 +102,22 @@ export const App = () => {
             Гарантированный доход
           </Typography.TitleResponsive>
           <Typography.Text view="primary-medium">
-            Ваши деньги приносят доход. Условия и ставка не меняется весь срок
+            Ваши деньги приносят доход. Условия и ставка не меняется весь срок. Деньги зачислятся, когда вклад закроется
           </Typography.Text>
 
           <div style={{ marginTop: '12px' }}>
+            <Typography.Text view="primary-small" color="secondary" tag="p" defaultMargins={false}>
+              Откуда пополнить
+            </Typography.Text>
+
+            <div className={appSt.bannerAccount}>
+              <img src={rubIcon} width={76} height={48} alt="rubIcon" />
+
+              <Typography.Text view="primary-small">Альфа-Вклад</Typography.Text>
+            </div>
+          </div>
+
+          <div>
             <AmountInput
               label="Сколько"
               labelView="outer"
@@ -119,6 +131,7 @@ export const App = () => {
               max={1_000_000}
               positiveOnly
               integersOnly
+              disabled={checked}
               onBlur={() => {
                 if (sum < 1000) {
                   setSum(1000);
@@ -131,13 +144,11 @@ export const App = () => {
 
           <div>
             <Swiper style={{ marginLeft: '0' }} spaceBetween={8} slidesPerView="auto">
-              {chipsData.map(chip => (
-                <SwiperSlide key={chip} style={{ maxWidth: 'min-content' }}>
-                  <Tag size={32} view="filled" shape="rectangular" checked={chip === sum} onClick={() => setSum(chip)}>
-                    <Typography.Text view="primary-small">{chip.toLocaleString('ru')} ₽</Typography.Text>
-                  </Tag>
-                </SwiperSlide>
-              ))}
+              <SwiperSlide style={{ maxWidth: 'min-content' }}>
+                <Tag size={32} view="filled" shape="rectangular" checked={checked} onClick={() => setChecked(!checked)}>
+                  <Typography.Text view="primary-small">Перевести всё</Typography.Text>
+                </Tag>
+              </SwiperSlide>
             </Swiper>
           </div>
 
