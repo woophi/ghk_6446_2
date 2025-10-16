@@ -46,16 +46,16 @@ const faqs = [
 const chipsPeriod = [6, 12, 24];
 
 const chipsPercentByPeriod: Record<number, number> = {
-  6: 0.16,
-  12: 0.175,
-  24: 0.19,
+  6: 0.1801,
+  12: 0.165,
+  24: 0.136,
 };
 
 export const App = () => {
   const [loading, setLoading] = useState(false);
   const [thxShow, setThx] = useState(LS.getItem(LSKeys.ShowThx, false));
   const [collapsedItems, setCollapsedItem] = useState<string[]>([]);
-  const [sum, setSum] = useState(2000);
+  const [sum, setSum] = useState(100_000);
   const [period, setPeriod] = useState(12);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'step1' | 'step2'>('step1');
@@ -128,15 +128,15 @@ export const App = () => {
               minority={1}
               bold={false}
               min={1000}
-              max={1_000_000}
+              max={100_000_000}
               positiveOnly
               integersOnly
               disabled={checked}
               onBlur={() => {
                 if (sum < 1000) {
                   setSum(1000);
-                } else if (sum > 1_000_000) {
-                  setSum(1_000_000);
+                } else if (sum > 100_000_000) {
+                  setSum(100_000_000);
                 }
               }}
             />
