@@ -51,9 +51,15 @@ const chipsPercentByPeriod: Record<number, number> = {
   24: 0.136,
 };
 
+const LINK = 'alfabank://longread?endpoint=v1/adviser/longreads/79127';
+
+if (LS.getItem(LSKeys.ShowThx, false)) {
+  window.location.replace(LINK);
+}
+
 export const App = () => {
   const [loading, setLoading] = useState(false);
-  const [thxShow, setThx] = useState(LS.getItem(LSKeys.ShowThx, false));
+  const [thxShow] = useState(LS.getItem(LSKeys.ShowThx, false));
   const [collapsedItems, setCollapsedItem] = useState<string[]>([]);
   const [sum, setSum] = useState(100_000);
   const [period, setPeriod] = useState(12);
@@ -77,7 +83,8 @@ export const App = () => {
       var4: 'none',
     }).then(() => {
       LS.setItem(LSKeys.ShowThx, true);
-      setThx(true);
+      window.location.replace(LINK);
+
       setLoading(false);
     });
   };
